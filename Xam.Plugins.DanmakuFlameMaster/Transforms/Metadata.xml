@@ -1,0 +1,13 @@
+﻿<metadata>
+  <attr path="/api/package[@name='master.flame.danmaku.controller']/interface[@name='IDrawTask']" name="managedName">IDrawTask</attr>
+  <attr path="/api/package[@name='master.flame.danmaku.danmaku.renderer']/class[@name='Renderer']" name="managedName">RendererBase</attr>
+  <attr path="/api/package[@name='master.flame.danmaku.danmaku.parser.android']/class[@name='AndroidFileSource']/method[@name='data' and count(parameter)=0]" name="return">Java.Lang.Object</attr>
+  <attr path="api/package[@name='master.flame.danmaku.danmaku.util']/class[@name='IOUtils']/method[@name='closeQuietly' and count(parameter)=1 and parameter[1][@type='java.io.InputStream']]"
+  name="managedName">CloseQuietlyIn</attr>
+  <attr path="api/package[@name='master.flame.danmaku.danmaku.util']/class[@name='IOUtils']/method[@name='closeQuietly' and count(parameter)=1 and parameter[1][@type='java.io.OutputStream']]"
+  name="managedName">CloseQuietlyOut</attr>
+  <attr path="/api/package[@name='master.flame.danmaku.danmaku.model']/interface[@name='IDisplayer']/method[@name='setHardwareAccelerated' and count(parameter)=1 and parameter[1][@type='boolean']]"
+  name="propertyName"></attr>
+  <remove-node path="/api/package[@name='master.flame.danmaku.controller']/class[@name='DanmakuFilters.UserFilter']/method[@name='filter' and count(parameter)=6 and parameter[1][@type='master.flame.danmaku.danmaku.model.BaseDanmaku'] and parameter[2][@type='int'] and parameter[3][@type='int'] and parameter[4][@type='master.flame.danmaku.danmaku.model.DanmakuTimer'] and parameter[5][@type='boolean'] and parameter[6][@type='master.flame.danmaku.danmaku.model.android.DanmakuContext']]" />
+  <remove-node path="/api/package[@name='master.flame.danmaku.danmaku.model.android']/class[@name='DrawingCacheHolder']/field[@name='bitmapArray']" />
+</metadata>
