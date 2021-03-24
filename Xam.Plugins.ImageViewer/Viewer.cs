@@ -6,6 +6,7 @@ using DialogFragment = Android.Support.V4.App.DialogFragment;
 
 namespace Xam.Plugins.ImageViewer
 {
+    //https://github.com/imablanco/Zoomy
     public sealed class Viewer
     {
         public static ViewerConfig DefaultConfig { get; set; } = new ViewerConfig();
