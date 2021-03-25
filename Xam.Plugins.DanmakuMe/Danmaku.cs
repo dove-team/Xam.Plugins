@@ -9,30 +9,31 @@
         public const string COLOR_YELLOW = "#ffffff00";
         public const string COLOR_PURPLE = "#ffff00ff";
         public const int DEFAULT_TEXT_SIZE = 24;
-        public string text;
-        public int size = DEFAULT_TEXT_SIZE;
-        public Mode mode = Mode.scroll;
-        public string color = COLOR_WHITE;
-        public enum Mode
+        public string Text;
+        public string Color = COLOR_WHITE;
+        public int Size = DEFAULT_TEXT_SIZE;
+        public DanmaukuMode Mode = DanmaukuMode.Scroll;
+        public enum DanmaukuMode
         {
-            scroll, top, bottom
+            Scroll,
+            Top,
+            Bottom
         }
         public Danmaku() { }
-        public Danmaku(string text, int textSize, Mode mode, string color)
+        public Danmaku(string text, int textSize, DanmaukuMode mode, string color)
         {
-            this.text = text;
-            this.size = textSize;
-            this.mode = mode;
-            this.color = color;
+            this.Text = text;
+            this.Size = textSize;
+            this.Mode = mode;
+            this.Color = color;
         }
         public override string ToString()
         {
-            return "Danmaku{" +
-                    "text='" + text + '\'' +
-                    ", textSize=" + size +
-                    ", mode=" + mode +
-                    ", color='" + color + '\'' +
-                    '}';
+            return string.Concat("Danmaku{",
+                    "text='", Text, '\'',
+                    ", textSize=", Size,
+                    ", mode=", Mode,
+                    ", color='", Color, '\'', '}');
         }
     }
 }

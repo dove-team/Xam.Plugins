@@ -5,6 +5,6 @@
         T Get();
         void Release();
         int Count();
-        void SetMaxSize(int max);
+        int MaxSize { get; set; }
     }
 }

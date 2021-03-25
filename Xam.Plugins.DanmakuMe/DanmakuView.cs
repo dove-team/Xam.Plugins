@@ -1,156 +1,170 @@
-﻿using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
+﻿using Android.Content;
 using Android.Util;
 using Android.Views;
+using Android.Views.Animations;
 using Android.Widget;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Xam.Plugins.DanmakuMe.Interface;
+using Xam.Plugins.DanmakuMe.Listener;
+using Xam.Plugins.DanmakuMe.Utils;
 
 namespace Xam.Plugins.DanmakuMe
 {
     //https://github.com/LittleFogCat/EasyDanmaku
     public class DanmakuView : TextView
     {
-        public Danmaku mDanmaku { get; set; }
-        private ListenerInfo mListenerInfo;
-        private class ListenerInfo
-        {
-            public List<OnEnterListener> mOnEnterListeners;
-            public List<OnExitListener> mOnExitListener;
-        }
-        public interface OnEnterListener
-        {
-            void onEnter(DanmakuView view);
-        }
-        public interface OnExitListener
-        {
-            void onExit(DanmakuView view);
-        }
-        private int mDuration;
+        public int Duration { get; set; }
+        private Scroller Scroller { get; set; }
+        public Danmaku Danmaku { get; set; }
+        private ListenerInfo ListenerInfo { get; set; }
         public DanmakuView(Context context) : base(context) { }
         public DanmakuView(Context context, IAttributeSet attrs) : base(context, attrs) { }
         public DanmakuView(Context context, IAttributeSet attrs, int defStyleAttr) : base(context, attrs, defStyleAttr) { }
-        public void setDanmaku(Danmaku danmaku)
+        public void SetDanmaku(Danmaku danmaku)
         {
-            mDanmaku = danmaku;
-            SetText(danmaku.text);
-            switch (danmaku.mode)
+            Danmaku = danmaku;
+            Text = danmaku.Text;
+            switch (danmaku.Mode)
             {
-                case Danmaku.Mode.top:
-                case Danmaku.Mode.bottom:
+                case Danmaku.DanmaukuMode.Top:
+                case Danmaku.DanmaukuMode.Bottom:
                     Gravity = GravityFlags.Center;
                     break;
-                case Danmaku.Mode.scroll:
+                case Danmaku.DanmaukuMode.Scroll:
                 default:
                     Gravity = GravityFlags.Start | GravityFlags.CenterVertical;
                     break;
             }
         }
-        public void show(ViewGroup parent, int duration)
+        public void Show(ViewGroup parent, int duration)
         {
-            mDuration = duration;
-            switch (mDanmaku.mode)
+            Duration = duration;
+            switch (Danmaku.Mode)
             {
-                case Danmaku.Mode.top:
-                case Danmaku.Mode.bottom:
-                    showFixedDanmaku(parent, duration);
+                case Danmaku.DanmaukuMode.Top:
+                case Danmaku.DanmaukuMode.Bottom:
+                    ShowFixedDanmaku(parent);
                     break;
-                case Danmaku.Mode.scroll:
+                case Danmaku.DanmaukuMode.Scroll:
                 default:
-                    showScrollDanmaku(parent, duration);
+                    ShowScrollDanmaku(parent, duration);
                     break;
             }
-            if (hasOnEnterListener())
+            if (HasOnEnterListener)
             {
-                foreach (OnEnterListener listener in getListenerInfo().mOnEnterListeners)
-                    listener.onEnter(this);
+                foreach (IOnEnterListener listener in CurrentListenerInfo.OnEnterListeners)
+                    listener.OnEnter(this);
             }
             PostDelayed(() =>
             {
                 Visibility = ViewStates.Gone;
-                if (hasOnExitListener())
+                if (HasOnExitListener)
                 {
-                    foreach (OnExitListener listener in getListenerInfo().mOnExitListener)
-                        listener.onExit(this);
+                    foreach (IOnExitListener listener in CurrentListenerInfo.OnExitListeners)
+                        listener.OnExit(this);
                 }
                 parent.RemoveView(this);
             }, duration);
         }
-        private void showScrollDanmaku(ViewGroup parent, int duration)
+        private void ShowScrollDanmaku(ViewGroup parent, int duration)
         {
-            int screenWidth = ScreenUtil.getScreenWidth();
-            int textLength = getTextLength();
+            int screenWidth = ScreenUtil.ScreenWidth;
             ScrollTo(-screenWidth, 0);
             parent.AddView(this);
-            smoothScrollTo(textLength, 0, duration);
+            SmoothScrollTo(TextLength, 0, duration);
         }
-        private void showFixedDanmaku(ViewGroup parent, int duration)
+        public void SmoothScrollTo(int x, int y, int duration)
+        {
+            if (Scroller == null)
+            {
+                Scroller = new Scroller(Context, new LinearInterpolator());
+                SetScroller(Scroller);
+            }
+            int sx = ScrollX, sy = ScrollY;
+            Scroller.StartScroll(sx, sy, x - sx, y - sy, duration);
+        }
+        private void ShowFixedDanmaku(ViewGroup parent)
         {
             Gravity = GravityFlags.Center;
             parent.AddView(this);
         }
-        private ListenerInfo getListenerInfo()
+        private ListenerInfo CurrentListenerInfo
         {
-            if (mListenerInfo == null)
-                mListenerInfo = new ListenerInfo();
-            return mListenerInfo;
+            get
+            {
+                if (ListenerInfo == null)
+                    ListenerInfo = new ListenerInfo();
+                return ListenerInfo;
+            }
         }
-        public void addOnEnterListener(OnEnterListener l)
+        public void AddOnEnterListener(IOnEnterListener l)
         {
-            ListenerInfo li = getListenerInfo();
-            if (li.mOnEnterListeners == null)
-                li.mOnEnterListeners = new List<OnEnterListener>();
-            if (!li.mOnEnterListeners.Contains(l))
-                li.mOnEnterListeners.Add(l);
+            ListenerInfo li = CurrentListenerInfo;
+            if (li.OnEnterListeners == null)
+                li.OnEnterListeners = new List<IOnEnterListener>();
+            if (!li.OnEnterListeners.Contains(l))
+                li.OnEnterListeners.Add(l);
         }
-        public void clearOnEnterListeners()
+        public void ClearOnEnterListeners()
         {
-            ListenerInfo li = getListenerInfo();
-            if (li.mOnEnterListeners == null || li.mOnEnterListeners.Count == 0)
+            ListenerInfo li = CurrentListenerInfo;
+            if (li.OnEnterListeners == null || li.OnEnterListeners.Count == 0)
                 return;
-            li.mOnEnterListeners.Clear();
+            li.OnEnterListeners.Clear();
         }
-        public void addOnExitListener(OnExitListener l)
+        public void AddOnExitListener(IOnExitListener l)
         {
-            ListenerInfo li = getListenerInfo();
-            if (li.mOnExitListener == null)
-                li.mOnExitListener = new List<OnExitListener>();
-            if (!li.mOnExitListener.Contains(l))
-                li.mOnExitListener.Add(l);
+            ListenerInfo li = CurrentListenerInfo;
+            if (li.OnExitListeners == null)
+                li.OnExitListeners = new List<IOnExitListener>();
+            if (!li.OnExitListeners.Contains(l))
+                li.OnExitListeners.Add(l);
         }
-        public void clearOnExitListeners()
+        public void ClearOnExitListeners()
         {
-            ListenerInfo li = getListenerInfo();
-            if (li.mOnExitListener == null || li.mOnExitListener.Count == 0)
+            ListenerInfo li = CurrentListenerInfo;
+            if (li.OnExitListeners == null || li.OnExitListeners.Count == 0)
                 return;
-            li.mOnExitListener.Clear();
+            li.OnExitListeners.Clear();
         }
-        public bool hasOnEnterListener()
+        public bool HasOnEnterListener
         {
-            ListenerInfo li = getListenerInfo();
-            return li.mOnEnterListeners != null && li.mOnEnterListeners.Count != 0;
+            get
+            {
+                ListenerInfo li = CurrentListenerInfo;
+                return li.OnEnterListeners != null && li.OnEnterListeners.Count != 0;
+            }
         }
-        public bool hasOnExitListener()
+        public bool HasOnExitListener
         {
-            ListenerInfo li = getListenerInfo();
-            return li.mOnExitListener != null && li.mOnExitListener.Count != 0;
+            get
+            {
+                ListenerInfo li = CurrentListenerInfo;
+                return li.OnExitListeners != null && li.OnExitListeners.Count != 0;
+            }
         }
-        public int getTextLength()
+        public int TextLength
         {
-            return (int)Paint.MeasureText(Text.ToString());
+            get
+            {
+                return (int)Paint.MeasureText(Text.ToString());
+            }
         }
-
-        public int getDuration()
+        public void Restore()
         {
-            return mDuration;
+            ClearOnEnterListeners();
+            ClearOnExitListeners();
+            Visibility = ViewStates.Visible;
+            ScrollX = 0;
+            ScrollY = 0;
         }
-        private void SetText(object text)
+        public override void ComputeScroll()
         {
-            throw new NotImplementedException();
+            if (Scroller != null && Scroller.ComputeScrollOffset())
+            {
+                ScrollTo(Scroller.CurrX, Scroller.CurrY);
+                PostInvalidate();
+            }
         }
     }
 }

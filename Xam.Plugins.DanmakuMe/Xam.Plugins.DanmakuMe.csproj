@@ -49,13 +49,25 @@
   <ItemGroup>
     <Compile Include="CachedDanmakuViewPool.cs" />
     <Compile Include="Danmaku.cs" />
+    <Compile Include="DanmakuManager.cs" />
+    <Compile Include="DanmakuPositionCalculator.cs" />
     <Compile Include="DanmakuView.cs" />
-    <Compile Include="IPool.cs" />
+    <Compile Include="DanmakuViewCreator.cs" />
+    <Compile Include="DanmakuViewFactory.cs" />
+    <Compile Include="DanmakuViewWithExpireTime.cs" />
+    <Compile Include="Interface\IOnEnterListener.cs" />
+    <Compile Include="Interface\IOnExitListener.cs" />
+    <Compile Include="Interface\IViewCreator.cs" />
+    <Compile Include="Interface\IPool.cs" />
+    <Compile Include="Listener\DanmakuExitListener.cs" />
+    <Compile Include="Listener\ExitListener.cs" />
+    <Compile Include="Listener\ListenerInfo.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\AboutResources.txt" />
+    <Compile Include="Utils\Config.cs" />
+    <Compile Include="Utils\Ext.cs" />
+    <Compile Include="Utils\MeVisual.cs" />
+    <Compile Include="Utils\ScreenUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Android.Support.v7.AppCompat" Version="28.0.0.3" />
@@ -65,6 +77,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\danmaku_view.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
