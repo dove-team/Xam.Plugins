@@ -48,15 +48,15 @@ namespace Xam.Plugins.Theme
                     {
                         if (attrs.GetAttributeName(i).Equals(ChangeModeController.ATTR_BACKGROUND))
                         {
-                            Controller.mBackGroundViews.Add(new AttrEntity<View>(view, Controller.GetAttr(mClass, attrs.GetAttributeValue(i))));
+                            Controller.BackGroundViews.Add(new AttrEntity<View>(view, Controller.GetAttr(mClass, attrs.GetAttributeValue(i))));
                         }
                         if (attrs.GetAttributeName(i).Equals(ChangeModeController.ATTR_TEXTCOLOR))
                         {
-                            Controller.mTextColorViews.Add(new AttrEntity<TextView>((TextView)view, Controller.GetAttr(mClass, attrs.GetAttributeValue(i))));
+                            Controller.TextColorViews.Add(new AttrEntity<TextView>((TextView)view, Controller.GetAttr(mClass, attrs.GetAttributeValue(i))));
                         }
                         if (attrs.GetAttributeName(i).Equals(ChangeModeController.ATTR_BACKGROUND_DRAWABLE))
                         {
-                            Controller.mBackGroundDrawableViews.Add(new AttrEntity<View>(view, Controller.GetAttr(mClass, attrs.GetAttributeValue(i))));
+                            Controller.BackGroundDrawableViews.Add(new AttrEntity<View>(view, Controller.GetAttr(mClass, attrs.GetAttributeValue(i))));
                         }
                     }
                 }

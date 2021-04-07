@@ -4,6 +4,8 @@ using Android.Content;
 using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.OS;
+using Android.Support.V4.Content;
+using Android.Support.V4.Content.Res;
 using Android.Support.V4.View;
 using Android.Util;
 using Android.Views;
@@ -18,11 +20,16 @@ namespace Xam.Plugins.Theme
         public const string ATTR_TEXTCOLOR = "textColorAttr";
         public const string ATTR_BACKGROUND = "backgroundAttr";
         public const string ATTR_BACKGROUND_DRAWABLE = "backgroundDrawableAttr";
-        internal List<AttrEntity<View>> mBackGroundViews;
-        internal List<AttrEntity<View>> mBackGroundDrawableViews;
-        internal List<AttrEntity<TextView>> mTextColorViews;
+        internal List<AttrEntity<View>> BackGroundViews { get; }
+        internal List<AttrEntity<TextView>> TextColorViews { get; }
+        internal List<AttrEntity<View>> BackGroundDrawableViews { get; }
         private static ChangeModeController mChangeModeController;
-        private ChangeModeController() { }
+        private ChangeModeController()
+        {
+            BackGroundViews = new List<AttrEntity<View>>();
+            TextColorViews = new List<AttrEntity<TextView>>();
+            BackGroundDrawableViews = new List<AttrEntity<View>>();
+        }
         public static ChangeModeController Instance
         {
             get
@@ -32,15 +39,8 @@ namespace Xam.Plugins.Theme
                 return mChangeModeController;
             }
         }
-        private void Init()
-        {
-            mBackGroundViews = new List<AttrEntity<View>>();
-            mTextColorViews = new List<AttrEntity<TextView>>();
-            mBackGroundDrawableViews = new List<AttrEntity<View>>();
-        }
         public ChangeModeController Init(Activity activity, Class mClass)
         {
-            Init();
             LayoutInflaterCompat.SetFactory2(LayoutInflater.From(activity), new LayoutInflaterFactory(this, mClass));
             return this;
         }
@@ -71,7 +71,7 @@ namespace Xam.Plugins.Theme
         }
         public void ChangeNight(Activity ctx, int style)
         {
-            if (mBackGroundDrawableViews == null || mTextColorViews == null || mBackGroundViews == null)
+            if (BackGroundDrawableViews == null || TextColorViews == null || BackGroundViews == null)
                 throw new RuntimeException("请先调用init()初始化方法!");
             ChangeModeHelper.SetChangeMode(ctx, ChangeModeHelper.MODE_NIGHT);
             ctx.SetTheme(style);
@@ -80,7 +80,7 @@ namespace Xam.Plugins.Theme
         }
         public void ChangeDay(Activity ctx, int style)
         {
-            if (mBackGroundDrawableViews == null || mTextColorViews == null || mBackGroundViews == null)
+            if (BackGroundDrawableViews == null || TextColorViews == null || BackGroundViews == null)
                 throw new RuntimeException("请先调用init()初始化方法!");
             ChangeModeHelper.SetChangeMode(ctx, ChangeModeHelper.MODE_DAY);
             ctx.SetTheme(style);
@@ -92,20 +92,21 @@ namespace Xam.Plugins.Theme
             TypedValue typedValue = new TypedValue();
             var theme = ctx.Theme;
             theme.ResolveAttribute(Resource.Color.colorPrimary, typedValue, true);
-            foreach (AttrEntity<View> entity in mBackGroundViews)
+            foreach (AttrEntity<View> entity in BackGroundViews)
             {
                 theme.ResolveAttribute(entity.ColorId, typedValue, true);
                 entity.View.SetBackgroundResource(typedValue.ResourceId);
             }
-            foreach (AttrEntity<View> entity in mBackGroundDrawableViews)
+            foreach (AttrEntity<View> entity in BackGroundDrawableViews)
             {
                 theme.ResolveAttribute(entity.ColorId, typedValue, true);
                 entity.View.SetBackgroundResource(typedValue.ResourceId);
             }
-            foreach (AttrEntity<TextView> entity in mTextColorViews)
+            foreach (AttrEntity<TextView> entity in TextColorViews)
             {
                 theme.ResolveAttribute(entity.ColorId, typedValue, true);
-                entity.View.SetTextColor(ctx.Resources.GetColor(typedValue.ResourceId));
+                var color = new Color(ContextCompat.GetColor(ctx, typedValue.ResourceId));
+                entity.View.SetTextColor(color);
             }
             RefreshStatusBar(ctx);
         }
@@ -123,7 +124,8 @@ namespace Xam.Plugins.Theme
                 TypedValue typedValue = new TypedValue();
                 var theme = ctx.Theme;
                 theme.ResolveAttribute(Resource.Color.colorPrimaryDark, typedValue, true);
-                ctx.Window.SetStatusBarColor(ctx.Resources.GetColor(typedValue.ResourceId));
+                var color = new Color(ContextCompat.GetColor(ctx, typedValue.ResourceId));
+                ctx.Window.SetStatusBarColor(color);
             }
         }
         private void ShowAnimation(Activity ctx)
@@ -132,10 +134,8 @@ namespace Xam.Plugins.Theme
             Bitmap cacheBitmap = GetCacheBitmapFromView(decorView);
             if (decorView is ViewGroup group && cacheBitmap != null)
             {
-                View view = new View(ctx);
-                view.SetBackgroundDrawable(new BitmapDrawable(ctx.Resources, cacheBitmap));
-                ViewGroup.LayoutParams layoutParam = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent,
-                        ViewGroup.LayoutParams.MatchParent);
+                View view = new View(ctx) { Background = new BitmapDrawable(ctx.Resources, cacheBitmap) };
+                ViewGroup.LayoutParams layoutParam = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent);
                 group.AddView(view, layoutParam);
                 ValueAnimator objectAnimator = ValueAnimator.OfFloat(1f, 0f);
                 objectAnimator.SetDuration(500);
@@ -146,15 +146,22 @@ namespace Xam.Plugins.Theme
         }
         private Bitmap GetCacheBitmapFromView(View view)
         {
+            Bitmap drawingCache;
             bool drawingCacheEnabled = true;
-            view.DrawingCacheEnabled = drawingCacheEnabled;
-            view.BuildDrawingCache(drawingCacheEnabled);
-            Bitmap drawingCache = view.DrawingCache;
+            if (Build.VERSION.SdkInt < BuildVersionCodes.P)
+            {
+                view.DrawingCacheEnabled = drawingCacheEnabled;
+                view.BuildDrawingCache(drawingCacheEnabled);
+                drawingCache = view.DrawingCache;
+            }
+            else
+                drawingCache = view.ViewDrawingCache();
             Bitmap bitmap;
             if (drawingCache != null)
             {
                 bitmap = Bitmap.CreateBitmap(drawingCache);
-                view.DrawingCacheEnabled = false;
+                if (Build.VERSION.SdkInt < BuildVersionCodes.P)
+                    view.DrawingCacheEnabled = false;
             }
             else
             {
@@ -164,27 +171,24 @@ namespace Xam.Plugins.Theme
         }
         public void OnDestory()
         {
-            mBackGroundViews.Clear();
-            mTextColorViews.Clear();
-            mBackGroundDrawableViews.Clear();
-            mBackGroundViews = null;
-            mTextColorViews = null;
-            mBackGroundDrawableViews = null;
+            BackGroundViews.Clear();
+            TextColorViews.Clear();
+            BackGroundDrawableViews.Clear();
             mChangeModeController = null;
         }
         public ChangeModeController AddBackgroundColor(View view, int colorId)
         {
-            mBackGroundViews.Add(new AttrEntity<View>(view, colorId));
+            BackGroundViews.Add(new AttrEntity<View>(view, colorId));
             return this;
         }
         public ChangeModeController AddBackgroundDrawable(View view, int drawableId)
         {
-            mBackGroundDrawableViews.Add(new AttrEntity<View>(view, drawableId));
+            BackGroundDrawableViews.Add(new AttrEntity<View>(view, drawableId));
             return this;
         }
         public ChangeModeController AddTextColor(View view, int colorId)
         {
-            mTextColorViews.Add(new AttrEntity<TextView>((TextView)view, colorId));
+            TextColorViews.Add(new AttrEntity<TextView>((TextView)view, colorId));
             return this;
         }
     }

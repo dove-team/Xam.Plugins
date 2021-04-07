@@ -15,7 +15,8 @@ namespace Xam.Plugins.Theme
         public override void OnAnimationEnd(Animator animation)
         {
             base.OnAnimationEnd(animation);
-            ((ViewGroup)DecorView).RemoveView(View);
+            if (DecorView is ViewGroup view)
+                view.RemoveView(View);
         }
     }
 }

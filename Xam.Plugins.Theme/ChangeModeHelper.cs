@@ -9,13 +9,23 @@ namespace Xam.Plugins.Theme
         private const string Mode = "mode";
         public static void SetChangeMode(Context ctx, int mode)
         {
-            var sp = ctx.GetSharedPreferences("config_mode", FileCreationMode.Private);
-            sp.Edit().PutInt(Mode, mode).Commit();
+            try
+            {
+                var sp = ctx.GetSharedPreferences("config_mode", FileCreationMode.Private);
+                if (sp != null)
+                    sp.Edit().PutInt(Mode, mode).Commit();
+            }
+            catch { }
         }
         public static int GetChangeMode(Context ctx)
         {
-            var sp = ctx.GetSharedPreferences("config_mode", FileCreationMode.Private);
-            return sp.GetInt(Mode, MODE_DAY);
+            try
+            {
+                var sp = ctx.GetSharedPreferences("config_mode", FileCreationMode.Private);
+                return sp == null ? default : sp.GetInt(Mode, MODE_DAY);
+            }
+            catch { }
+            return default;
         }
     }
 }

@@ -13,8 +13,12 @@ namespace Xam.Plugins.Theme
         }
         public void OnAnimationUpdate(ValueAnimator animation)
         {
-            var alpha = (Float)animation.AnimatedValue;
-            View.Alpha = alpha.FloatValue();
+            try
+            {
+                var alpha = (Float)animation.AnimatedValue;
+                View.Alpha = alpha.FloatValue();
+            }
+            catch { }
         }
     }
 }
