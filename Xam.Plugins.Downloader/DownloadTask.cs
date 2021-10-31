@@ -10,7 +10,7 @@ using Environment = Android.OS.Environment;
 
 namespace Xam.Plugins.Downloader
 {
-    public sealed class DownloadTask : AsyncTask<string, int, int>
+    internal sealed class DownloadTask : AsyncTask<string, int, int>
     {
         public const int TYPE_SUCCESS = 0;
         public const int TYPE_FAILED = 1;

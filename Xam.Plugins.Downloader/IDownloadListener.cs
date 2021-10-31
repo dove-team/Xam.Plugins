@@ -1,6 +1,6 @@
 ﻿namespace Xam.Plugins.Downloader
 {
-    public interface IDownloadListener
+    internal interface IDownloadListener
     {
         /// <summary>
         /// 用于通知当前下载进度

@@ -4,7 +4,7 @@ using Java.Lang;
 
 namespace Xam.Plugins.Downloader
 {
-    public sealed class ServiceConnection : Object, IServiceConnection
+    internal sealed class ServiceConnection : Object, IServiceConnection
     {
         public DownloadBinder DownloadBinder { get; private set; }
         public void OnServiceConnected(ComponentName name, IBinder binder)

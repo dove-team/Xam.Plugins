@@ -2,26 +2,20 @@
 using Android.Content;
 using Android.Graphics;
 using Android.OS;
-using Android.Runtime;
 using Android.Support.V4.App;
-using Android.Support.V7.App;
-using Android.Views;
-using Android.Widget;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Xam.Plugins.Downloader
 {
     [Service]
     public sealed class DownloadService : Service
     {
-        public string ChannelId { get; set; }
         internal string DownloadUrl;
         private DownloadBinder Binder;
         internal DownloadListener Listener;
         internal DownloadTask DownloadTask;
+        private readonly string CHANNEL_ID = Guid.NewGuid().ToString("N");
+        private const string CHANNEL_NAME = "Xam.Plugins.Downloader";
         public override IBinder OnBind(Intent intent)
         {
             return Binder;
@@ -37,9 +31,16 @@ namespace Xam.Plugins.Downloader
         }
         internal Notification GetNotification(string title, int progress)
         {
-            Intent intent = new Intent(this, typeof(ActivationContext));
+            Intent intent = new Intent(this, typeof(Activity));
             PendingIntent pi = PendingIntent.GetActivity(this, 0, intent, 0);
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, ChannelId);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID);
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
+            {
+                var notificationManager = (NotificationManager)GetSystemService(NotificationService);
+                NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationImportance.Default);
+                channel.EnableVibration(false);
+                notificationManager.CreateNotificationChannel(channel);
+            }
             builder.SetSmallIcon(Downloader.Instance.NotifyIconResId);
             builder.SetLargeIcon(BitmapFactory.DecodeResource(Resources, Downloader.Instance.NotifyIconResId));
             builder.SetContentIntent(pi);
@@ -49,6 +50,7 @@ namespace Xam.Plugins.Downloader
                 builder.SetContentText(progress + "%");
                 builder.SetProgress(100, progress, false);
             }
+            StartForeground(Downloader.Instance.NotificationID, builder.Build());
             return builder.Build();
         }
     }

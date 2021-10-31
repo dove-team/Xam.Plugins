@@ -18,22 +18,30 @@ namespace Xam.Plugins.Downloader
             }
         }
         private bool init = false;
+        public int NotificationID { get; internal set; }
         private ServiceConnection Connection { get; set; }
-        public DownloadBinder Binder
-        {
-            get
-            {
-                if (!init)
-                    throw new ArgumentException("Init Downloader before call this.");
-                return Connection?.DownloadBinder;
-            }
-        }
         public int NotifyIconResId { get; set; } = Resource.Drawable.notification_action_background;
-        public void Init(Activity activity)
+        public void StartDownload(string url)
+        {
+            if (!init)
+                throw new ArgumentException("Init Downloader before call this.");
+            if (Connection != null)
+                Connection.DownloadBinder.StartDownload(url);
+        }
+        public void PauseDownload()
+        {
+            Connection.DownloadBinder.PauseDownload();
+        }
+        public void CancelDownload()
+        {
+            Connection.DownloadBinder.CancelDownload();
+        }
+        public void Init(Activity activity, int notifyIconResId)
         {
             if (!init)
             {
                 init = true;
+                NotifyIconResId = notifyIconResId;
                 Connection = new ServiceConnection();
                 Intent intent = new Intent(activity, typeof(DownloadService));
                 activity.StartService(intent);
