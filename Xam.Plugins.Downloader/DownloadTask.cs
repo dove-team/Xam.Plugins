@@ -3,6 +3,7 @@ using Java.IO;
 using Square.OkHttp3;
 using System;
 using System.IO;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using File = Java.IO.File;
 using Debug = System.Diagnostics.Debug;
@@ -10,21 +11,21 @@ using Environment = Android.OS.Environment;
 
 namespace Xam.Plugins.Downloader
 {
-    internal sealed class DownloadTask : AsyncTask<string, int, int>
+    internal sealed class DownloadTask : AsyncTask<object, int, int>
     {
         public const int TYPE_SUCCESS = 0;
         public const int TYPE_FAILED = 1;
         public const int TYPE_PAUSED = 2;
         public const int TYPE_CANCELED = 3;
         private int lastProgress;
-        private bool isCanceled = false;
         private bool isPaused = false;
+        private bool isCanceled = false;
         private IDownloadListener Listener { get; }
         public DownloadTask(IDownloadListener listener)
         {
             Listener = listener;
         }
-        protected override int RunInBackground(params string[] parms)
+        protected override int RunInBackground(params object[] parms)
         {
             Stream inputStream = null;
             RandomAccessFile savedFile = null;
@@ -32,26 +33,33 @@ namespace Xam.Plugins.Downloader
             try
             {
                 long downloadedLength = 0;
-                string downloadUrl = parms[0];
+                string downloadUrl = parms[0].ToString();
                 string fileName = downloadUrl[downloadUrl.LastIndexOf("/")..];
                 string directory = Environment.GetExternalStoragePublicDirectory(Environment.DirectoryDownloads).Path;
                 file = new File(directory + fileName);
                 if (file.Exists())
                     downloadedLength = file.Length();
-                long contentLength = GetContentLength(downloadUrl);
+                Headers.Builder headerBuilder = new Headers.Builder();
+                if (parms[1] is Dictionary<string, string> headers && headers.Count > 0)
+                {
+                    foreach (var header in headers)
+                        headerBuilder.Add(header.Key, header.Value);
+                }
+                var headersAttr = headerBuilder.Build();
+                long contentLength = GetContentLength(downloadUrl, headersAttr);
                 if (contentLength == 0)
                     return TYPE_FAILED;
                 else if (contentLength == downloadedLength)
                     return TYPE_SUCCESS;
                 OkHttpClient client = new OkHttpClient();
-                Request request = new Request.Builder().AddHeader("RANGE", "bytes=" + downloadedLength + "-").Url(downloadUrl).Build();
+                Request request = new Request.Builder().AddHeader("RANGE", "bytes=" + downloadedLength + "-").Headers(headersAttr).Url(downloadUrl).Build();
                 Response response = client.NewCall(request).Execute();
                 if (response != null)
                 {
                     inputStream = response.Body().ByteStream();
                     savedFile = new RandomAccessFile(file, "rw");
                     savedFile.Seek(downloadedLength);
-                    byte[] b = new byte[1024];
+                    byte[] b = new byte[5120];
                     int len, total = 0;
                     while ((len = inputStream.Read(b)) != -1)
                     {
@@ -68,6 +76,7 @@ namespace Xam.Plugins.Downloader
                         }
                     }
                     response.Body().Close();
+                    b = null;
                     return TYPE_SUCCESS;
                 }
             }
@@ -122,16 +131,29 @@ namespace Xam.Plugins.Downloader
         }
         public void PauseDownload() => isPaused = true;
         public void CancelDownload() => isCanceled = true;
-        private long GetContentLength(string downloadUrl)
+        private long GetContentLength(string downloadUrl, Headers headers)
         {
+            Request request = null;
+            Response response = null;
             OkHttpClient client = new OkHttpClient();
-            Request request = new Request.Builder().Url(downloadUrl).Build();
-            Response response = client.NewCall(request).Execute();
-            if (response != null && response.IsSuccessful)
+            try
             {
-                long contentLength = response.Body().ContentLength();
-                response.Body().Close();
-                return contentLength;
+                request = new Request.Builder().Url(downloadUrl).Headers(headers).Build();
+                response = client.NewCall(request).Execute();
+                if (response != null && response.IsSuccessful)
+                {
+                    long contentLength = response.Body().ContentLength();
+                    response.Body().Close();
+                    return contentLength;
+                }
+                request.Dispose();
+            }
+            catch { }
+            finally
+            {
+                client.Dispose();
+                request?.Dispose();
+                response?.Dispose();
             }
             return 0;
         }

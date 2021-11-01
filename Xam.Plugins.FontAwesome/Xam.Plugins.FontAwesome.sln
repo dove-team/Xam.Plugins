@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31702.278
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xam.Plugins.FontAwesome", "Xam.Plugins.FontAwesome\Xam.Plugins.FontAwesome.csproj", "{EA4B0453-2D76-409B-A620-69C9BFD07D1B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xam.Plugins.FontAwesome.Sample", "Xam.Plugins.FontAwesome.Sample\Xam.Plugins.FontAwesome.Sample.csproj", "{CBC0A542-6B26-40F9-8D6F-55ABEBD5EE4A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EA4B0453-2D76-409B-A620-69C9BFD07D1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA4B0453-2D76-409B-A620-69C9BFD07D1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA4B0453-2D76-409B-A620-69C9BFD07D1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA4B0453-2D76-409B-A620-69C9BFD07D1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBC0A542-6B26-40F9-8D6F-55ABEBD5EE4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBC0A542-6B26-40F9-8D6F-55ABEBD5EE4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBC0A542-6B26-40F9-8D6F-55ABEBD5EE4A}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{CBC0A542-6B26-40F9-8D6F-55ABEBD5EE4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBC0A542-6B26-40F9-8D6F-55ABEBD5EE4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBC0A542-6B26-40F9-8D6F-55ABEBD5EE4A}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C7E67380-EEED-43EB-BA94-56CC1525BBCD}
+	EndGlobalSection
+EndGlobal

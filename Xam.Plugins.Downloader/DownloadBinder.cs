@@ -3,6 +3,7 @@ using Android.Runtime;
 using Android.Widget;
 using Java.IO;
 using System;
+using System.Collections.Generic;
 using Environment = Android.OS.Environment;
 
 namespace Xam.Plugins.Downloader
@@ -15,7 +16,7 @@ namespace Xam.Plugins.Downloader
             Service = service;
         }
         public DownloadBinder(IntPtr reference, JniHandleOwnership transfer) : base(reference, transfer) { }
-        public void StartDownload(string url)
+        public void StartDownload(string url, Dictionary<string, string> headers)
         {
             try
             {
@@ -23,7 +24,7 @@ namespace Xam.Plugins.Downloader
                 {
                     Service.DownloadUrl = url;
                     Service.DownloadTask = new DownloadTask(Service.Listener);
-                    Service.DownloadTask.Execute(Service.DownloadUrl);
+                    Service.DownloadTask.Execute(Service.DownloadUrl, headers);
                     Service.StartForeground(Downloader.Instance.NotificationID, Service.GetNotification("Downloading...", 0));
                     Toast.MakeText(Service, "下载中", ToastLength.Short).Show();
                 }

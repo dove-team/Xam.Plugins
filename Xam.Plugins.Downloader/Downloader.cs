@@ -1,6 +1,7 @@
 ﻿using Android.App;
 using Android.Content;
 using System;
+using System.Collections.Generic;
 
 namespace Xam.Plugins.Downloader
 {
@@ -21,12 +22,12 @@ namespace Xam.Plugins.Downloader
         public int NotificationID { get; internal set; }
         private ServiceConnection Connection { get; set; }
         public int NotifyIconResId { get; set; } = Resource.Drawable.notification_action_background;
-        public void StartDownload(string url)
+        public void StartDownload(string url, Dictionary<string, string> headers)
         {
             if (!init)
                 throw new ArgumentException("Init Downloader before call this.");
             if (Connection != null)
-                Connection.DownloadBinder.StartDownload(url);
+                Connection.DownloadBinder.StartDownload(url, headers);
         }
         public void PauseDownload()
         {
