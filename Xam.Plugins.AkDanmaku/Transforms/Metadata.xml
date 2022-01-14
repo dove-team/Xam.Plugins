@@ -1,0 +1,5 @@
+﻿<metadata>
+	<attr path="/api/package[@name='com.kuaishou.akdanmaku.ecs.component.filter']/class[@name='TypeFilter']/method[@name='filterField']" name="return">Java.Lang.Object</attr>
+	<attr path="/api/package[@name='com.kuaishou.akdanmaku.ecs.component.filter']/class[@name='UserIdFilter']/method[@name='filterField']" name="return">Java.Lang.Object</attr>
+	<attr path="/api/package[@name='com.kuaishou.akdanmaku.ecs.component.filter']/class[@name='BlockedTextFilter']/method[@name='filterField']" name="return">Java.Lang.Object</attr>
+</metadata>
