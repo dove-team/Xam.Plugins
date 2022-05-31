@@ -51,7 +51,7 @@
     <TransformFile Include="Transforms\EnumMethods.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Jars\aidl-12.1.0.aar" />
+    <LibraryProjectZip Include="Jars\aidl-12.1.0.aar" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Additions\" />
