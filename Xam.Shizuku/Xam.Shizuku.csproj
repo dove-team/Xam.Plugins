@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{FC02BF6F-00F6-4778-BF4A-FC53E8A051B3}</ProjectGuid>
+    <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TemplateGuid>{9ef11e43-1701-4396-8835-8392d57abb70}</TemplateGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Xam.Shizuku</RootNamespace>
+    <AssemblyName>Xam.Shizuku</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>True</Deterministic>
+    <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <AndroidUseLatestPlatformSdk>false</AndroidUseLatestPlatformSdk>
+    <TargetFrameworkVersion>v12.0</TargetFrameworkVersion>
+    <AndroidUseAapt2>true</AndroidUseAapt2>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>portable</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>portable</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Mono.Android" />
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Android\Content\IIntentReceiver.cs" />
+    <Compile Include="Android\Content\IIntentSender.cs" />
+    <Compile Include="Android\Content\Intent.cs" />
+    <Compile Include="Android\Content\IntentSender.cs" />
+    <Compile Include="Android\Content\PM\BaseParceledListSlice.cs" />
+    <Compile Include="Android\Content\PM\IPackageInstaller.cs" />
+    <Compile Include="Android\Content\PM\IPackageInstallerSession.cs" />
+    <Compile Include="Android\Content\PM\IPackageManager.cs" />
+    <Compile Include="Android\Content\PM\PackageInstaller.cs" />
+    <Compile Include="Android\Content\PM\ParceledListSlice.cs" />
+    <Compile Include="Android\Content\PM\UserInfo.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Xamarin.AndroidX.AppCompat" Version="1.2.0.5" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Android\Annotation\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Xam.Plugins.Shizuku\Xam.Shizuku.AIDL\Xam.Shizuku.AIDL.csproj">
+      <Project>{3e343748-2482-4264-9cc0-ff7e0f54edab}</Project>
+      <Name>Xam.Shizuku.AIDL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Xam.Plugins.Shizuku\Xam.Shizuku.API\Xam.Shizuku.API.csproj">
+      <Project>{bdd3249a-b354-4768-92dd-76be26bbcd86}</Project>
+      <Name>Xam.Shizuku.API</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Xam.Plugins.Shizuku\Xam.Shizuku.Provider\Xam.Shizuku.Provider.csproj">
+      <Project>{eb06b18c-0dce-412d-b620-aa0547a8f57b}</Project>
+      <Name>Xam.Shizuku.Provider</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Xam.Plugins.Shizuku\Xam.Shizuku.Shared\Xam.Shizuku.Shared.csproj">
+      <Project>{2ea59ddb-0561-4c26-8850-ca768a07c662}</Project>
+      <Name>Xam.Shizuku.Shared</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
