@@ -56,6 +56,12 @@
   <ItemGroup>
     <Folder Include="Additions\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Xam.Shizuku.AIDL\Xam.Shizuku.AIDL.csproj">
+      <Project>{3e343748-2482-4264-9cc0-ff7e0f54edab}</Project>
+      <Name>Xam.Shizuku.AIDL</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.Bindings.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -56,6 +56,12 @@
   <ItemGroup>
     <Folder Include="Additions\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Xam.Shizuku.API\Xam.Shizuku.API.csproj">
+      <Project>{bdd3249a-b354-4768-92dd-76be26bbcd86}</Project>
+      <Name>Xam.Shizuku.API</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.Bindings.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
