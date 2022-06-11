@@ -1,0 +1,15 @@
+﻿<metadata>
+	<remove-node path="/api/package[@name='com.bytedance.pangle.provider']/class[@name='PluginContentProvider']/method[@name='query']" />
+	<remove-node path="/api/package[@name='com.bytedance.pangle.provider']/class[@name='PluginContentProvider']/method[@name='insert']" />
+	<remove-node path="/api/package[@name='com.bytedance.pangle.provider']/class[@name='PluginContentProvider']/method[@name='delete']" />
+	<remove-node path="/api/package[@name='com.bytedance.pangle.provider']/class[@name='PluginContentProvider']/method[@name='update']" />
+	<remove-node path="/api/package[@name='com.bytedance.pangle.provider']/class[@name='PluginContentProvider']/method[@name='getType']" />
+	<attr path="api/package[@name='com.bytedance.sdk.openadsdk']/interface[@name='TTSplashAd.AdInteractionListener']/method[@name='onAdShow' and count(parameter)=2 and parameter[1][@type='android.view.View'] and parameter[2][@type='int']]" name="managedName">onSplashAdShow</attr>
+	<attr path="api/package[@name='com.bytedance.sdk.openadsdk']/interface[@name='TTNativeExpressAd.ExpressVideoAdListener']/method[@name='onVideoError' and count(parameter)=2 and parameter[1][@type='int'] and parameter[2][@type='int']]" name="managedName">onExpressVideoError</attr>
+	<attr path="api/package[@name='com.bytedance.sdk.openadsdk']/interface[@name='TTBannerAd.AdInteractionListener']/method[@name='onAdShow' and count(parameter)=2 and parameter[1][@type='android.view.View'] and parameter[2][@type='int']]" name="managedName">onBannerAdShow</attr>
+	<attr path="api/package[@name='com.bytedance.sdk.openadsdk']/interface[@name='TTSplashAd.AdInteractionListener']/method[@name='onAdClicked' and count(parameter)=2 and parameter[1][@type='android.view.View'] and parameter[2][@type='int']]" name="managedName">onSplashAdClicked</attr>
+	<attr path="api/package[@name='com.bytedance.sdk.openadsdk']/interface[@name='TTBannerAd.AdInteractionListener']/method[@name='onAdClicked' and count(parameter)=2 and parameter[1][@type='android.view.View'] and parameter[2][@type='int']]" name="managedName">onBannerAdClicked</attr>
+	<attr path="api/package[@name='com.bytedance.sdk.openadsdk']/interface[@name='TTNativeExpressAd.ExpressVideoAdListener']/method[@name='onProgressUpdate' and count(parameter)=2 and parameter[1][@type='long'] and parameter[2][@type='long']]" name="managedName">onExpressProgressUpdate</attr>
+	<attr path="api/package[@name='com.bytedance.sdk.openadsdk']/interface[@name='TTNativeExpressAd.ExpressAdInteractionListener']/method[@name='onAdShow' and count(parameter)=2 and parameter[1][@type='android.view.View'] and parameter[2][@type='int']]" name="managedName">onExpressAdShow</attr>
+	<attr path="api/package[@name='com.bytedance.sdk.openadsdk']/interface[@name='TTNativeExpressAd.ExpressAdInteractionListener']/method[@name='onAdClicked' and count(parameter)=2 and parameter[1][@type='android.view.View'] and parameter[2][@type='int']]" name="managedName">onExpressAdClicked</attr>
+</metadata>
