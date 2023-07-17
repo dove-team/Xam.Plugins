@@ -1,7 +1,7 @@
 ﻿using Android.Content;
 using Android.Graphics;
 using Android.Graphics.Drawables;
-using Android.Support.V4.Content;
+using AndroidX.Core.Content;
 
 namespace Xam.Plugins.SwipeList
 {

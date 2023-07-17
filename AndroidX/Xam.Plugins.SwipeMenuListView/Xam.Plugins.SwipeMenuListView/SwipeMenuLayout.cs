@@ -1,13 +1,13 @@
 ﻿using Android.Content;
-using Android.Support.V4.View;
 using Android.Views;
 using Android.Views.Animations;
 using Android.Widget;
+using AndroidX.Core.View;
 using Math = Java.Lang.Math;
 
 namespace Xam.Plugins.SwipeList
 {
-	public class SwipeMenuLayout : FrameLayout
+    public class SwipeMenuLayout : FrameLayout
 	{
 		private const int CONTENT_VIEW_ID = 1;
 		private const int MENU_VIEW_ID = 2;
